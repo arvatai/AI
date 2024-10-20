@@ -1,0 +1,86 @@
+Why are the paused campaigns getting enabled?
+When using the Dayparting strategy, it is important to note that any paused campaigns linked to this strategy will become enabled if a multiplier of "0x" is set anywhere within the strategy. This is because a multiplier of 0x indicates that the campaigns, regardless of their current status, will be paused. When the multiplier is set to a value greater than 0, the campaigns will be enabled, regardless of their previous state. This is why paused campaigns linked to the Dayparting strategy may become enabled when the strategy is executed. It is important to keep this in mind when utilizing the Dayparting strategy and managing your paused campaigns.
+
+What happens if you change the bid from AMS? Why is the changed bid not reflecting on Adbrew?
+AMS bid change will reflect in Adbrew by doing a Force Refresh
+When making changes to bids on Amazon Ads Console (AMS), they are reflected immediately on the AMS platform. However, these changes may not appear instantaneously on Adbrew, as Adbrew's system retrieves data from the Amazon Ads API at fixed intervals.
+
+To ensure that your changes made on AMS are reflected on Adbrew in real-time, we recommend using the "Force Refresh" option located in the top right corner of the Adbrew platform, as shown in the provided image. By using this feature, bid changes made on AMS will be immediately reflected on Adbrew and your bid changes will be in sync.
+
+
+Tip: We recommend making changes directly through Adbrew. This platform provides the ability to make any changes that can be made on AMS, and the data will be updated instantly.
+
+
+
+What is Hourly Performance in Dayparting? Why is it not shown for some markets?
+Amazon's Marketing Stream feature offers hourly data on consumer behavior and industry trends in select countries. It allows users to access near real-time metrics and information on Amazon Ads campaigns through the Ads API, enabling them to analyze campaign performance at specific hours of the day.
+
+For countries where Marketing Stream by Amazon is launched, the Hourly Performance tab shown in the image below will be populated with data from every hour of the day. 
+
+
+
+However, if the Hourly Performance tab displays the message "This feature is only available in select countries," it indicates that Amazon's Marketing Stream feature has not yet been launched in the country where the account is active. This is depicted in the image provided..
+
+
+How are the bid changes handled when dayparting is active?
+Adbrew's Dayparting system uses multipliers from the Dayparting schedule to adjust the bids for specific targets. Once the Dayparting feature is activated, the system examines the bid for each keyword or target and saves it as the base bid.
+
+The methods of handling changes in bids differ depending on your choice of Conflict Resolution mode, whether it is "Override" or "Adaptive".
+
+In the "Override" mode, any manual or automated bid changes made at specific times will replace the base bid completely. On the other hand, the "Adaptive" mode adjusts the bids based on specified multipliers if it detects a conflict, instead of solely relying on the new bid as the base bid. This adaptive approach ensures a more effective bid management strategy.
+
+To understand this in detail, let us take an example:
+
+Let's assume that a keyword has a bid of $2 when dayparting is enabled. The Dayparting schedule is configured as seen in the table: 
+
+Both the modes will behave in a similar manner when no conflict is detected, as shown in the below table:
+ 	 	In Override Mode	
+In Adaptive Mode
+
+Time	Multiplier	Base Bid	Calculation	Bid Value 	
+Base Bid
+
+Calculation
+
+Bid Value
+1 PM
+
+2x	$2	$2 X 2	$4	$2	$2 X 2	
+$4
+
+2 PM	3x	$2	$2 X 3	$6	$2	$2 X 3	$6
+ 
+
+Let's say that the bid is changed to $30 at 2:30 PM, either manually or through bid management automation scheduled to run at this time, then the further calculations will differ as:
+ 	 	In Override Mode	
+In Adaptive Mode
+
+Time	Multiplier	Base Bid	Calculation	Bid Value 	
+Base Bid
+
+Calculation
+
+Bid Value
+3 PM	4x	$30	$30 X 4	$120	($30/3) = $10	$10 X 4	$40
+ 	 	In Override mode, the system considers the newly entered bid (i.e., $30) as the base bid. 	In Adaptive mode, the system considers $10 (i.e., 30/3, where 30 is the newly entered bid and 3 is the previously set multiplier at 2 PM) as the base bid.
+ 
+
+The succeeding changes will happen in the manner explained below:
+ 	 	In Override Mode	
+In Adaptive Mode
+
+Time	Multiplier	Base Bid	Calculation	Bid Value 	
+Base Bid
+
+Calculation
+
+Bid Value
+4 PM	5x	$30	$30 X 5	$150	$10	$10 X 5	$50
+5 PM	1x	$30	$30 X 1	$30	
+$10
+
+$10 X 1 	$10
+Recommended best practices:
+
+In Adaptive Mode: We recommend changing the bids through Adbrew only. However, if you choose to modify the bids directly in AMS or any other platform outside Adbrew, make sure to perform a Force Refresh immediately. It is crucial to perform this step; otherwise, if Adbrew's data sync schedule does not run before the next dayparting change, the adjusted bid may get overridden.
+In Override Mode:  Make changes (through Adbrew any other platform) during the hour where the multiplier is set to 1x, or while making changes in other hours ensure you are taking the base bid for that hour into consideration. If you are making changes through the AMS (or any other platform outside Adbrew), make sure to perform a Force Refresh immediately or the changes could get overridden.
