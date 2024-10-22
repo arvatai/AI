@@ -4,10 +4,12 @@ import json
 import tiktoken
 
 #TODO
+#make everything parametriezed from the python cli. example: orgID, transcriptID
 #temperature
 #max tokens
 #imporve code
 #chunk
+
 
 def get_documents_by_org_id(org_id, db_name, collection_name,id, uri="mongodb://localhost:27017/"):
    
