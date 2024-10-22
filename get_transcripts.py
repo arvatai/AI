@@ -1,5 +1,14 @@
 from mongoConnect import get_mongo_client
 import re
+import json
+import tiktoken
+
+#TODO
+#temperature
+#max tokens
+#imporve code
+#chunk
+
 def get_documents_by_org_id(org_id, db_name, collection_name,id, uri="mongodb://localhost:27017/"):
    
     client = get_mongo_client(uri)
@@ -21,14 +30,41 @@ def get_documents_by_org_id(org_id, db_name, collection_name,id, uri="mongodb://
     finally:
         client.close()
 
-if __name__ == "__main__":
+def count_tokens(text):
+    # Use the encoding for GPT-3 (or choose the correct encoding for the model you're using)
+    encoding = tiktoken.encoding_for_model("gpt-3.5-turbo")
+    return len(encoding.encode(text))
 
-    documents = get_documents_by_org_id("66ee6885d74a544e1691a641", "gosky", "aggregated_transcripts","2ecZKPhADVim46zb")
-    with open("hi.txt", 'w') as file:
-        file.write(str(documents.get("sentences")))
+def count_words(text):
+    # Split by whitespace to count words
+    return len(text.split())
+
+if __name__ == "__main__":
+    documents = get_documents_by_org_id("668f523a28251c636bafea0c", "gosky", "aggregated_transcripts", "2ecZKPhADVim46zb")
+    
     if documents:
-        transcript= documents.get("sentences")
-        print(transcript)
+        # Retrieve the sentences from the documents
+        sentences = documents.get("sentences")
+
+        if sentences:
+            raw_data = ""
+            for sentence in sentences:
+                speaker_name = sentence.get("speaker_name", "")
+                raw_text = sentence.get("raw_text", "")
+                raw_data += f"{speaker_name} {raw_text}\n"
+            
+            # Calculate and print the token count and word count
+            token_count = count_tokens(raw_data)
+            word_count = count_words(raw_data)
+
+            print(f"GPT Token Count: {token_count}")
+            print(f"Word Count: {word_count}")
+            
+            # Write the result to a file
+            with open("hi.txt", 'w') as file:
+                file.write(raw_data)
+        else:
+            print("No sentences found in the document.")
     else:
         print("No documents found or an error occurred.")
 
@@ -38,11 +74,7 @@ def read_and_clean_file(file_path):
     try:
         with open(file_path, 'r') as file:
             content = file.read()
-
-  
-        cleaned_content = re.sub(r'[^\w\s]', '', content)
-
-        return cleaned_content
+        return content
     except FileNotFoundError:
         print(f"File {file_path} not found.")
         return None
