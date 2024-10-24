@@ -9,7 +9,7 @@ documents = loader.load()
 text_splitter = CharacterTextSplitter(chunk_size=100, chunk_overlap=0)
 docs = text_splitter.split_documents(documents)
 
-mq = marqo.Client(url='http://localhost:8882')
+mq = marqo.Client(url='http://192.168.1.3:8882')
 
 index_name = "my-first-index"
 

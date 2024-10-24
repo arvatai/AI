@@ -1,5 +1,5 @@
 hi.txt
 /new
 /__pycache__
-/.vscode
 responses.txt
+.vscode/launch.json
