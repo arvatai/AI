@@ -21,7 +21,7 @@ def add_documents_to_db(api_key, connection, collection_name, file_path):
 
 # Usage
 if __name__ == "__main__":
-    api_key = "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"
+    api_key = 
     connection = "postgresql+psycopg://postgres:lovedeep@192.168.1.3:5432/vector_db"
     collection_name = "state_of_the_union_vectors"
     file_path = "test.txt"
